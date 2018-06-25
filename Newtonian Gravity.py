@@ -5,7 +5,6 @@ import numpy as np
 
 class Newtonian_Gravity():
     '''Simulation of newtonian gravity in 3 dimensions'''
-
     @staticmethod
     def create_initial_conditions():
         '''Create parameters for particles'''
@@ -14,22 +13,23 @@ class Newtonian_Gravity():
         vx,vy,vz = [0,0,0],[0,0,0],[0,0,0]
         return [[x,y,z],[vx,vy,vz]]
         
-    def __init__(self, part_pos, part_vel):
+    def __init__(self, pos, vel):
         '''Create plot for simulation'''
         #creates and shows the plot
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, projection='3d')
         self.fig.show()
 
-        self.pos = part_pos
-        self.vel = part_vel
+        #store positions and velocities (x,y,z in ith index is to ith particle)
+        self.part_pos = np.array(pos).T
+        self.part_vel = np.array(vel).T
 
         self.initial_draw()
         return
 
     def initial_draw(self):
         '''Draw data onto plot from the initial conditions'''
-        self.ax.scatter(*self.pos)
+        self.ax.scatter(*self.part_pos.T)
         return
 
     def start_simulation(self):
@@ -67,7 +67,7 @@ class Newtonian_Gravity():
     def redraw(self):
         '''Redraw plot with new particle parameters'''
         self.ax.clear()
-        self.ax.scatter(*self.pos)
+        self.ax.scatter(*self.part_pos.T)
         return
 
 
