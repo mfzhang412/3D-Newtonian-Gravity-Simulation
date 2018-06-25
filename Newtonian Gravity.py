@@ -1,5 +1,5 @@
 from mpl_toolkits.mplot3d import axes3d
-import matplotlib.anmation as animation
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -9,36 +9,74 @@ class Newtonian_Gravity():
     @staticmethod
     def create_initial_conditions():
         '''Create parameters for particles'''
-        return
+        #particle positions and velocities (ith index is ith particle)
+        x,y,z = [0,0,0],[0,10,1],[0,0,0]
+        vx,vy,vz = [0,0,0],[0,0,0],[0,0,0]
+        return [[x,y,z],[vx,vy,vz]]
         
-    def __init__(self):
+    def __init__(self, part_pos, part_vel):
         '''Create plot for simulation'''
+        #creates and shows the plot
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111, projection='3d')
+        self.fig.show()
+
+        self.pos = part_pos
+        self.vel = part_vel
+
+        self.initial_draw()
         return
 
     def initial_draw(self):
         '''Draw data onto plot from the initial conditions'''
+        self.ax.scatter(*self.pos)
         return
 
     def start_simulation(self):
         '''Start animation'''
+        self.ani = animation.FuncAnimation(self.fig, self.update, interval=50)
         return
 
-    def update(self):
+    def update(self, num):
         '''Animated function'''
+        self.first_order()
+        self.redraw()
         return
 
-    def calculate(self):
-        '''Calculate new parameters for particles'''
+    def first_order(self):
+        '''Calculate new parameters for particles with 1st order accuracy'''
+        #calculate new positions via r = r_0 + v*dt
+        #calculate force on ith particle due to j particles
+            #don't forget the small parameter to avoid dividing by 0
+        #obtain acceleration from a = F/m
+        #calculate new velocities via v = v_0 + a_dt
         return
 
+    def second_order(self):
+        '''Calculate new parameters for particles with 2nd order accuracy'''
+        return
+    
+    def third_order(self):
+        '''Calculate new parameters for particles with 3rd order accuracy'''
+        return
+    
+    def fourth_order(self):
+        '''Calculate new parameters for particles with 4th order accuracy'''
+        return
+    
     def redraw(self):
         '''Redraw plot with new particle parameters'''
+        self.ax.clear()
+        self.ax.scatter(*self.pos)
         return
 
 
 
 def main():
     '''Main function'''
+    init_conditions = Newtonian_Gravity.create_initial_conditions()
+    sim = Newtonian_Gravity(*init_conditions)
+    sim.start_simulation()
     return
 
 if __name__ == "__main__":
