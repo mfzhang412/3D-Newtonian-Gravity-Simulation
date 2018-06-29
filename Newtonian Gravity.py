@@ -73,6 +73,10 @@ class Newtonian_Gravity():
     
     def first_order(self):
         '''Calculate new parameters for particles with 1st order accuracy'''
+        G = Newtonian_Gravity.G
+        m = Newtonian_Gravity.m
+        dt = Newtonian_Gravity.dt
+        
         #calculate new positions via r = r_0 + v*dt
         for i in range(len(self.part_pos)):
             self.part_pos[i] = self.part_pos[i] + self.part_vel[i]*dt
@@ -87,6 +91,7 @@ class Newtonian_Gravity():
                     force[i] = force[i] + G*m*m*Newtonian_Gravity.weighted_vec(
                         self.part_pos[i],self.part_pos[j]
                         )
+                    
         #calculate new velocities via v = v_0 + F/m*dt
         for i in range(len(self.part_pos)):
             self.part_vel[i] = self.part_vel[i] + force[i]/m*dt
