@@ -7,7 +7,7 @@ import math
 class Newtonian_Gravity():
     '''Simulation of newtonian gravity in 3 dimensions'''
     #Gravitational constant
-    G = 1
+    G = 50
     #Mass of each particle
     m = 1
     #Euler timestep
@@ -17,15 +17,22 @@ class Newtonian_Gravity():
     def create_initial_conditions():
         '''Create parameters for particles'''
         #particle positions and velocities (ith index is ith particle)
-        x,y,z = [0,0,0],[0,10,1],[0,0,0]
-        vx,vy,vz = [0,0,0],[0,0,0],[0,0,0]
-        return [[x,y,z],[vx,vy,vz]]
+        x,y,z = [.25,-.25],[0,0],[0,0]
+        vx,vy,vz = [0,0],[math.sqrt(200),-1*math.sqrt(200)],[0,0]
+        xlim,ylim,zlim = [-5,5],[-5,5],[-5,5]
+        return [[x,y,z],[vx,vy,vz],[xlim,ylim,zlim]]
         
-    def __init__(self, pos, vel):
+    def __init__(self, pos, vel, lim):
         '''Create plot for simulation'''
+        #sets the axis range
+        self.xlim = lim[0]
+        self.ylim = lim[1]
+        self.zlim = lim[2]
+        
         #creates and shows the plot
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, projection='3d')
+        self.setPlotParams()
         self.fig.show()
 
         #store positions and velocities (x,y,z in ith index is to ith particle)
@@ -44,6 +51,28 @@ class Newtonian_Gravity():
         '''Start animation'''
         self.ani = animation.FuncAnimation(self.fig, self.update, interval=50)
         return
+
+    def redraw(self):
+        '''Redraw plot with new particle parameters'''
+        self.ax.clear()
+        self.setPlotParams()
+        self.ax.scatter(*self.part_pos.T)
+        return
+
+    def setPlotParams(self):
+        '''Set the title, range, and labels of the axis'''
+        #set plot title
+        plt.title('3D Newtonian Gravity Simulation')
+
+        #set axis range
+        self.ax.set_xlim(self.xlim)
+        self.ax.set_ylim(self.ylim)
+        self.ax.set_zlim(self.zlim)
+
+        #set axis labels
+        self.ax.set_xlabel('x')
+        self.ax.set_ylabel('y')
+        self.ax.set_zlabel('z')
 
     def update(self, num):
         '''Animated function'''
@@ -107,12 +136,6 @@ class Newtonian_Gravity():
     
     def fourth_order(self):
         '''Calculate new parameters for particles with 4th order accuracy'''
-        return
-    
-    def redraw(self):
-        '''Redraw plot with new particle parameters'''
-        self.ax.clear()
-        self.ax.scatter(*self.part_pos.T)
         return
 
 
