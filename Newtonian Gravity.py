@@ -3,11 +3,12 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import random
 
 class Newtonian_Gravity():
     '''Simulation of newtonian gravity in 3 dimensions'''
     #Gravitational constant
-    G = 50
+    G = 500
     #Mass of each particle
     m = 1
     #Euler timestep
@@ -17,9 +18,19 @@ class Newtonian_Gravity():
     def create_initial_conditions():
         '''Create parameters for particles'''
         #particle positions and velocities (ith index is ith particle)
-        x,y,z = [.25,-.25],[0,0],[0,0]
-        vx,vy,vz = [0,0],[math.sqrt(200),-1*math.sqrt(200)],[0,0]
-        xlim,ylim,zlim = [-5,5],[-5,5],[-5,5]
+        topBound = 10
+        botBound = -10
+        x,y,z = [0.0]*10,[0.0]*10,[0.0]*10
+        vx,vy,vz = [0.0]*10,[0.0]*10,[0.0]*10
+        xlim,ylim,zlim = [-15,15],[-15,15],[-15,15]
+        for i in range(10):
+            x[i] = float(random.randint(botBound-1,topBound))
+            y[i] = float(random.randint(botBound-1,topBound))
+            z[i] = float(random.randint(botBound-1,topBound))
+
+            vx[i] = float(random.randint(botBound-1,topBound))
+            vy[i] = float(random.randint(botBound-1,topBound))
+            vz[i] = float(random.randint(botBound-1,topBound))
         return [[x,y,z],[vx,vy,vz],[xlim,ylim,zlim]]
         
     def __init__(self, pos, vel, lim):
@@ -84,21 +95,23 @@ class Newtonian_Gravity():
     def unit_vec(r1,r2):
         '''Return a unit vector in the r2-r1 direction'''
         r = r2-r1
-        magn = np.dot(r,r)
-        return r/math.sqrt(magn)
+        vec = r/np.linalg.norm(r)
+        return vec
 
     @staticmethod
     def inverse_square(r1,r2):
         '''Return 1/r^2 where r=r2-r1'''
         r = r2-r1
         magn = np.dot(r,r)
-        return 1/magn
+        val = 1/magn
+        return val
     
     @staticmethod
     def weighted_vec(r1,r2):
         '''Return the vector 1/r^2 in the r direction where r=r2-r1'''
-        r = Newtonian_Gravity.inverse_square(r1,r2)*Newtonian_Gravity.unit_vec(r1,r2)
-        return r
+        r = r2-r1
+        vec = r/(np.linalg.norm(r))**3
+        return vec
     
     def first_order(self):
         '''Calculate new parameters for particles with 1st order accuracy'''
