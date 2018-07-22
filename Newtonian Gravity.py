@@ -8,7 +8,7 @@ import random
 class Newtonian_Gravity():
     '''Simulation of newtonian gravity in 3 dimensions'''
     #Gravitational constant
-    G = 500
+    G = 100
     #Mass of each particle
     m = 1
     #Euler timestep
@@ -17,16 +17,22 @@ class Newtonian_Gravity():
     @staticmethod
     def create_initial_conditions():
         '''Create parameters for particles'''
+        #number of particles in the simulation
+        numPart = 100
+        
         #top and bottom bound for random distribution of positions and velocities
         botBound = -10
         topBound = 10
+        
         #particle positions and velocities (ith index is ith particle)
-        x,y,z = [0.0]*10,[0.0]*10,[0.0]*10
-        vx,vy,vz = [0.0]*10,[0.0]*10,[0.0]*10
+        x,y,z = [0.0]*numPart,[0.0]*numPart,[0.0]*numPart
+        vx,vy,vz = [0.0]*numPart,[0.0]*numPart,[0.0]*numPart
+        
         #set limits of graph axis
         xlim,ylim,zlim = [botBound-5,topBound+5],[botBound-5,topBound+5],[botBound-5,topBound+5]
+
         #create random positions and velocities for particles
-        for i in range(10):
+        for i in range(numPart):
             x[i] = random.uniform(botBound,topBound)
             y[i] = random.uniform(botBound,topBound)
             z[i] = random.uniform(botBound,topBound)
@@ -62,7 +68,9 @@ class Newtonian_Gravity():
 
     def start_simulation(self):
         '''Start animation'''
-        self.ani = animation.FuncAnimation(self.fig, self.update, interval=50)
+        #frame update interval in milliseconds
+        upd = 1
+        self.ani = animation.FuncAnimation(self.fig, self.update, interval=upd)
         return
 
     def redraw(self):
