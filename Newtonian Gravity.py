@@ -17,20 +17,22 @@ class Newtonian_Gravity():
     @staticmethod
     def create_initial_conditions():
         '''Create parameters for particles'''
-        #particle positions and velocities (ith index is ith particle)
-        topBound = 10
+        #top and bottom bound for random distribution of positions and velocities
         botBound = -10
+        topBound = 10
+        #particle positions and velocities (ith index is ith particle)
         x,y,z = [0.0]*10,[0.0]*10,[0.0]*10
         vx,vy,vz = [0.0]*10,[0.0]*10,[0.0]*10
-        xlim,ylim,zlim = [-15,15],[-15,15],[-15,15]
+        #set limits of graph axis
+        xlim,ylim,zlim = [botBound-5,topBound+5],[botBound-5,topBound+5],[botBound-5,topBound+5]
+        #create random positions and velocities for particles
         for i in range(10):
-            x[i] = float(random.randint(botBound-1,topBound))
-            y[i] = float(random.randint(botBound-1,topBound))
-            z[i] = float(random.randint(botBound-1,topBound))
-
-            vx[i] = float(random.randint(botBound-1,topBound))
-            vy[i] = float(random.randint(botBound-1,topBound))
-            vz[i] = float(random.randint(botBound-1,topBound))
+            x[i] = random.uniform(botBound,topBound)
+            y[i] = random.uniform(botBound,topBound)
+            z[i] = random.uniform(botBound,topBound)
+            vx[i] = random.uniform(botBound,topBound)
+            vx[i] = random.uniform(botBound,topBound)
+            vx[i] = random.uniform(botBound,topBound)
         return [[x,y,z],[vx,vy,vz],[xlim,ylim,zlim]]
         
     def __init__(self, pos, vel, lim):
@@ -109,8 +111,11 @@ class Newtonian_Gravity():
     @staticmethod
     def weighted_vec(r1,r2):
         '''Return the vector 1/r^2 in the r direction where r=r2-r1'''
+        #a small value parameter is needed to avoid divide by zero errors
+            #and avoid slingshot effects when particles are too close to eachother
+        small_val_param = 1
         r = r2-r1
-        vec = r/(np.linalg.norm(r))**3
+        vec = r/((np.linalg.norm(r))**3 + small_val_param)
         return vec
     
     def first_order(self):
@@ -118,13 +123,11 @@ class Newtonian_Gravity():
         G = Newtonian_Gravity.G
         m = Newtonian_Gravity.m
         dt = Newtonian_Gravity.dt
-        
         #calculate new positions via r = r_0 + v*dt
         for i in range(len(self.part_pos)):
             self.part_pos[i] = self.part_pos[i] + self.part_vel[i]*dt
             
         #calculate force on ith particle due to j particles
-            #don't forget the small parameter to avoid dividing by 0
         force = np.array([[0,0,0]]*len(self.part_pos))
         for i in range(len(self.part_pos)):
             for j in range(len(self.part_pos)):
